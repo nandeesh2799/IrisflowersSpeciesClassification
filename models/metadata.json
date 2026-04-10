@@ -1,0 +1,83 @@
+{
+  "created_on": "2026-04-10",
+  "selected_features": [
+    "petal_length",
+    "sepal_length",
+    "petal_width",
+    "sepal_width"
+  ],
+  "model_comparison": [
+    {
+      "name": "Logistic Regression",
+      "best_params": {
+        "clf__C": 1.0,
+        "clf__solver": "lbfgs"
+      },
+      "accuracy": 0.9333333333333333,
+      "precision_macro": 0.9333333333333332,
+      "recall_macro": 0.9333333333333332,
+      "f1_macro": 0.9333333333333332
+    },
+    {
+      "name": "Decision Tree",
+      "best_params": {
+        "criterion": "gini",
+        "max_depth": null,
+        "min_samples_split": 4
+      },
+      "accuracy": 0.9333333333333333,
+      "precision_macro": 0.9333333333333332,
+      "recall_macro": 0.9333333333333332,
+      "f1_macro": 0.9333333333333332
+    },
+    {
+      "name": "Random Forest",
+      "best_params": {
+        "max_depth": null,
+        "min_samples_leaf": 1,
+        "min_samples_split": 2,
+        "n_estimators": 100
+      },
+      "accuracy": 0.9333333333333333,
+      "precision_macro": 0.9333333333333332,
+      "recall_macro": 0.9333333333333332,
+      "f1_macro": 0.9333333333333332
+    }
+  ],
+  "extras": {
+    "classification_report": {
+      "setosa": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 10.0
+      },
+      "versicolor": {
+        "precision": 0.9,
+        "recall": 0.9,
+        "f1-score": 0.9,
+        "support": 10.0
+      },
+      "virginica": {
+        "precision": 0.9,
+        "recall": 0.9,
+        "f1-score": 0.9,
+        "support": 10.0
+      },
+      "accuracy": 0.9333333333333333,
+      "macro avg": {
+        "precision": 0.9333333333333332,
+        "recall": 0.9333333333333332,
+        "f1-score": 0.9333333333333332,
+        "support": 30.0
+      },
+      "weighted avg": {
+        "precision": 0.9333333333333333,
+        "recall": 0.9333333333333333,
+        "f1-score": 0.9333333333333333,
+        "support": 30.0
+      }
+    },
+    "test_size": 0.2
+  }
+}
