@@ -162,13 +162,8 @@ def main() -> None:
 
     st.write("")
 
-    if not MODEL_PATH.exists():
-        st.error(
-            "Model not found. Please run `python notebooks/train_eda_and_ppt.py` first to train and save the model."
-        )
-        st.stop()
-
-    model = get_model()
+    with st.spinner("Initializing classifier pipeline..."):
+        model = get_model()
 
     tab_predict, tab_species = st.tabs(["Predict", "Species gallery"])
 

@@ -8,6 +8,16 @@ from typing import Any
 import numpy as np
 import pandas as pd
 
+from iris_classifier.core.schemas import (
+    FEATURES,
+    IrisFeatures,
+    PredictionResult,
+    SpeciesInfo as CoreSpeciesInfo,
+    SPECIES_CATALOG,
+)
+from iris_classifier.core.predictor import IrisPredictor, get_default_predictor
+from iris_classifier.core.trainer import train_model_pipeline
+
 
 ROOT = Path(__file__).resolve().parents[1]
 MODEL_PATH = ROOT / "models" / "best_model.pkl"
@@ -54,7 +64,16 @@ SPECIES: dict[str, SpeciesInfo] = {
 
 
 def load_model(path: Path = MODEL_PATH) -> Any:
-    with path.open("rb") as f:
+    """Load model from path or bootstrap automatically if missing."""
+    p = Path(path)
+    if not p.exists():
+        train_model_pipeline(
+            data_path=ROOT / "data" / "iris.csv",
+            model_out=p,
+            metadata_out=ROOT / "models" / "metadata.json",
+        )
+    # Security Note: Model pickle is generated locally by train_model_pipeline within the trusted project boundary.
+    with p.open("rb") as f:
         return pickle.load(f)
 
 
@@ -77,19 +96,17 @@ def make_input_df(
 
 
 def predict(model: Any, X: pd.DataFrame) -> tuple[str, dict[str, float] | None]:
-    label = str(model.predict(X)[0])
+    label = str(model.predict(X)[0]).lower()
 
     proba: dict[str, float] | None = None
     if hasattr(model, "predict_proba"):
         probs = model.predict_proba(X)[0]
         classes = getattr(model, "classes_", None)
         if classes is not None:
-            proba = {str(c): float(p) for c, p in zip(classes, probs)}
+            proba = {str(c).lower(): float(p) for c, p in zip(classes, probs)}
         else:
             proba = {str(i): float(p) for i, p in enumerate(probs)}
 
-        # Make sure numeric drift doesn't show ugly values
         proba = {k: float(np.clip(v, 0.0, 1.0)) for k, v in proba.items()}
 
     return label, proba
-
