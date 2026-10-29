@@ -169,7 +169,17 @@ The pipeline trains and evaluates candidate models via `GridSearchCV` using 5-fo
 
 ---
 
-## 👨‍💻 Author
+## 👨‍💻 Author & Engineering Showcase
 
 **Nandeesh N K**  
-GitHub: [@nandeesh2799](https://github.com/nandeesh2799)
+Full-Stack Developer & AI Systems Engineer — Bengaluru, India  
+- 🌐 **Interactive Portfolio:** [NandeeshOS (Live Demo)](https://nandeesh2799-portfolio.vercel.app)
+- 💼 **LinkedIn:** [linkedin.com/in/nandeesh-n-k-729773270](https://linkedin.com/in/nandeesh-n-k-729773270)
+- 🐙 **GitHub Profile:** [github.com/nandeesh2799](https://github.com/nandeesh2799)
+- 📫 **Direct Email:** [nandeeshnk506@gmail.com](mailto:nandeeshnk506@gmail.com)
+
+---
+
+## 📜 License
+
+This project is licensed under the MIT License.
