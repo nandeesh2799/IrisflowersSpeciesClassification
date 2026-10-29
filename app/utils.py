@@ -64,15 +64,27 @@ SPECIES: dict[str, SpeciesInfo] = {
 
 
 def load_model(path: Path = MODEL_PATH) -> Any:
-    """Load model from path or bootstrap automatically if missing."""
+    """Load model from path or bootstrap automatically if missing or incompatible."""
     p = Path(path)
-    if not p.exists():
-        train_model_pipeline(
-            data_path=ROOT / "data" / "iris.csv",
-            model_out=p,
-            metadata_out=ROOT / "models" / "metadata.json",
-        )
-    # Security Note: Model pickle is generated locally by train_model_pipeline within the trusted project boundary.
+    if p.exists():
+        try:
+            with p.open("rb") as f:
+                model = pickle.load(f)
+            dummy = pd.DataFrame(
+                [{"sepal_length": 5.1, "sepal_width": 3.5, "petal_length": 1.4, "petal_width": 0.2}]
+            )
+            model.predict(dummy)
+            if hasattr(model, "predict_proba"):
+                model.predict_proba(dummy)
+            return model
+        except Exception:
+            pass
+
+    train_model_pipeline(
+        data_path=ROOT / "data" / "iris.csv",
+        model_out=p,
+        metadata_out=ROOT / "models" / "metadata.json",
+    )
     with p.open("rb") as f:
         return pickle.load(f)
 

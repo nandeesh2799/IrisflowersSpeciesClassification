@@ -36,12 +36,24 @@ class IrisPredictor:
             self._load_or_bootstrap()
 
     def _load_or_bootstrap(self) -> None:
-        """Load model from disk or bootstrap via training pipeline if missing."""
+        """Load model from disk or bootstrap via training pipeline if missing or incompatible."""
+        loaded_ok = False
         if self.model_path is not None and self.model_path.exists():
             # Security Note: Model pickle is generated locally by train_model_pipeline within the trusted project boundary.
-            with self.model_path.open("rb") as f:
-                self.model = pickle.load(f)
-        else:
+            try:
+                with self.model_path.open("rb") as f:
+                    self.model = pickle.load(f)
+                dummy = pd.DataFrame(
+                    [{"sepal_length": 5.1, "sepal_width": 3.5, "petal_length": 1.4, "petal_width": 0.2}]
+                )
+                self.model.predict(dummy)
+                if hasattr(self.model, "predict_proba"):
+                    self.model.predict_proba(dummy)
+                loaded_ok = True
+            except Exception:
+                loaded_ok = False
+
+        if not loaded_ok:
             # Self-bootstrap model and metadata
             self.model, _, meta = train_model_pipeline(
                 model_out=self.model_path,
