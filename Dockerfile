@@ -16,8 +16,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # Install dependencies first for efficient layer caching
 COPY pyproject.toml requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt && \
-    pip install --no-cache-dir -e .
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application code and assets
 COPY src/ ./src/
@@ -26,6 +25,9 @@ COPY assets/ ./assets/
 COPY data/ ./data/
 COPY models/ ./models/
 COPY outputs/ ./outputs/
+
+# Install the local package
+RUN pip install --no-cache-dir -e .
 
 EXPOSE 8501
 
